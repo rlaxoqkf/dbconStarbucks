@@ -1,7 +1,19 @@
 import UIKit
 
-class ViewController: UIViewController {
+// STEP 2의 'Home' 탭에 들어갈 내용물만 정의하는 ViewController
+class StarbucksMainViewController: UIViewController {
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        // 이 ViewController가 로드되면, 기존에 만들었던 모든 UI와 기능들이 여기에 그려집니다.
+        setupUI()
+        setupLayout()
+        addMenuItems()
+        setupDelegates()
+    }
+    
+    // (이 아래에는 이전에 작성했던 모든 UI 코드와 스크롤 로직이 그대로 존재합니다)
+    // ... (이하 모든 코드는 이전 Canvas와 동일) ...
     // MARK: - UI Components
     
     private let scrollView: UIScrollView = {
@@ -93,18 +105,6 @@ class ViewController: UIViewController {
 
     private var eventCards: [UIImageView] = []
     
-    // MARK: - Life Cycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupEventCards()
-        setupUI()
-        setupLayout()
-        addMenuItems()
-        setupDelegates()
-    }
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         addGradientToStickyBackground()
@@ -148,7 +148,7 @@ class ViewController: UIViewController {
             scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor), // Safe Area에 맞춤
 
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
@@ -175,25 +175,21 @@ class ViewController: UIViewController {
             menuStackView.heightAnchor.constraint(equalToConstant: 50),
             
             // --- 스티키 헤더 레이아웃 ---
-            // 1. 노치 배경 뷰
             notchOpaqueBackgroundView.topAnchor.constraint(equalTo: self.view.topAnchor),
             notchOpaqueBackgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             notchOpaqueBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             notchOpaqueBackgroundView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
 
-            // 2. 그라데이션 배경 뷰: Safe Area 상단에 위치, 높이 60
             gradientBackgroundView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
             gradientBackgroundView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             gradientBackgroundView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             gradientBackgroundView.heightAnchor.constraint(equalToConstant: 60),
 
-            // 3. 스티키 메뉴 스크롤뷰: 그라데이션 뷰와 동일한 위치/크기
             stickyMenuScrollView.topAnchor.constraint(equalTo: gradientBackgroundView.topAnchor),
             stickyMenuScrollView.leadingAnchor.constraint(equalTo: gradientBackgroundView.leadingAnchor),
             stickyMenuScrollView.trailingAnchor.constraint(equalTo: gradientBackgroundView.trailingAnchor),
             stickyMenuScrollView.heightAnchor.constraint(equalTo: gradientBackgroundView.heightAnchor),
             
-            // 4. 스티키 메뉴 스택뷰
             stickyMenuStackView.leadingAnchor.constraint(equalTo: stickyMenuScrollView.leadingAnchor, constant: 16),
             stickyMenuStackView.trailingAnchor.constraint(equalTo: stickyMenuScrollView.trailingAnchor, constant: -16),
             stickyMenuStackView.centerYAnchor.constraint(equalTo: stickyMenuScrollView.centerYAnchor),
@@ -312,7 +308,7 @@ class ViewController: UIViewController {
 }
 
 // MARK: - UIScrollViewDelegate
-extension ViewController: UIScrollViewDelegate {
+extension StarbucksMainViewController: UIScrollViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let originalMenuYPosition = bannerImageView.frame.height - 35
         let stickyPoint = originalMenuYPosition - self.view.safeAreaInsets.top
