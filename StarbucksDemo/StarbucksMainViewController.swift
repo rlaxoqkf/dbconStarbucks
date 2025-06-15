@@ -1,19 +1,35 @@
 import UIKit
 
 // STEP 2의 'Home' 탭에 들어갈 내용물만 정의하는 ViewController
-class StarbucksMainViewController: UIViewController {
+class StarbucksMainViewController: UIViewController, UIGestureRecognizerDelegate {
+
+    // MARK: - Life Cycle
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // 이 화면은 TabBarController 안에 있으므로, 부모의 네비게이션 컨트롤러를 참조해야 함
+        self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.delegate = self
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.navigationController?.interactivePopGestureRecognizer?.delegate = nil
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // 이 ViewController가 로드되면, 기존에 만들었던 모든 UI와 기능들이 여기에 그려집니다.
+        setupEventCards()
         setupUI()
         setupLayout()
         addMenuItems()
         setupDelegates()
     }
     
-    // (이 아래에는 이전에 작성했던 모든 UI 코드와 스크롤 로직이 그대로 존재합니다)
-    // ... (이하 모든 코드는 이전 Canvas와 동일) ...
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        addGradientToStickyBackground()
+    }
+    
     // MARK: - UI Components
     
     private let scrollView: UIScrollView = {
@@ -105,11 +121,6 @@ class StarbucksMainViewController: UIViewController {
 
     private var eventCards: [UIImageView] = []
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        addGradientToStickyBackground()
-    }
-    
     // MARK: - UI Setup
     
     private func setupEventCards() {
@@ -148,7 +159,7 @@ class StarbucksMainViewController: UIViewController {
             scrollView.topAnchor.constraint(equalTo: self.view.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor), // Safe Area에 맞춤
+            scrollView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
 
             contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
@@ -196,6 +207,7 @@ class StarbucksMainViewController: UIViewController {
             stickyMenuStackView.heightAnchor.constraint(equalToConstant: 50),
         ])
         
+        // --- 이벤트 카드 제약 ---
         var previousAnchor = menuScrollView.bottomAnchor
         for card in eventCards {
             constraints.append(contentsOf: [
@@ -203,6 +215,15 @@ class StarbucksMainViewController: UIViewController {
                 card.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
                 card.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16)
             ])
+            
+            // 카드의 높이 제약을 여기서 설정
+            if let image = card.image {
+                let aspectRatio = image.size.height / image.size.width
+                constraints.append(card.heightAnchor.constraint(equalTo: card.widthAnchor, multiplier: aspectRatio))
+            } else {
+                constraints.append(card.heightAnchor.constraint(equalToConstant: 200))
+            }
+            
             previousAnchor = card.bottomAnchor
         }
         
@@ -276,12 +297,9 @@ class StarbucksMainViewController: UIViewController {
     
     private func createEventCardImageView(imageName: String) -> UIImageView {
         let imageView = UIImageView()
-        if let image = UIImage(named: imageName) {
-            imageView.image = image
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: image.size.height / image.size.width).isActive = true
-        } else {
+        imageView.image = UIImage(named: imageName)
+        if imageView.image == nil {
             imageView.backgroundColor = .systemGray4
-            imageView.heightAnchor.constraint(equalToConstant: 200).isActive = true
         }
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = 10
@@ -301,7 +319,6 @@ class StarbucksMainViewController: UIViewController {
         ]
         gradientLayer.locations = [0.0, 0.5, 1.0]
         
-        // 이전에 추가된 레이어가 있다면 제거
         gradientBackgroundView.layer.sublayers?.removeAll()
         gradientBackgroundView.layer.addSublayer(gradientLayer)
     }
@@ -314,29 +331,24 @@ extension StarbucksMainViewController: UIScrollViewDelegate {
         let stickyPoint = originalMenuYPosition - self.view.safeAreaInsets.top
 
         if scrollView == self.scrollView {
-            // 뷰 계층을 다시 한 번 정리하여 스크롤 시에도 최상단을 유지
             self.view.bringSubviewToFront(notchOpaqueBackgroundView)
             self.view.bringSubviewToFront(gradientBackgroundView)
             self.view.bringSubviewToFront(stickyMenuScrollView)
             
             if scrollView.contentOffset.y > stickyPoint {
                 let alpha = min(1, (scrollView.contentOffset.y - stickyPoint) / 20)
-                // 3개의 뷰를 함께 제어
                 notchOpaqueBackgroundView.alpha = alpha
                 gradientBackgroundView.alpha = alpha
                 stickyMenuScrollView.alpha = alpha
-                // 겹침 현상 방지를 위해 원본 메뉴는 숨김
                 menuScrollView.alpha = 1 - alpha
             } else {
                 notchOpaqueBackgroundView.alpha = 0
                 gradientBackgroundView.alpha = 0
                 stickyMenuScrollView.alpha = 0
-                // 원본 메뉴 다시 표시
                 menuScrollView.alpha = 1
             }
         }
         
-        // 두 메뉴 스크롤뷰의 위치를 동기화
         if scrollView == menuScrollView {
             stickyMenuScrollView.contentOffset = scrollView.contentOffset
         } else if scrollView == stickyMenuScrollView {

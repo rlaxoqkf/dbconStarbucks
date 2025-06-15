@@ -1,9 +1,9 @@
+// StepListViewController.swift
+
 import UIKit
 
-// 스토리보드에서 Table View Controller로 생성
 class StepListViewController: UITableViewController {
     
-    // 각 단계별 제목과 설명을 담은 데이터
     private let steps: [(title: String, description: String)] = [
         ("STEP 1", "스타벅스 하단바 메뉴 구성"),
         ("STEP 2", "스타벅스 상단 배너 및 스티키 메뉴"),
@@ -19,7 +19,6 @@ class StepListViewController: UITableViewController {
     }
 
     // MARK: - Table view data source
-
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return steps.count
     }
@@ -46,16 +45,17 @@ class StepListViewController: UITableViewController {
         return cell
     }
     
-    // 이 메서드가 화면 전환의 핵심입니다.
+    // 화면 전환 직전에 호출되는 메서드 (핵심 수정)
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // 이동할 목적지가 'Step1ViewController'(탭 바의 틀)인지 확인
+        guard let tabBarController = segue.destination as? Step1ViewController else { return }
+
         // STEP 2 화면으로 이동할 때만 특별한 작업을 수행
         if segue.identifier == "showStep2" {
-            // 1. 이동할 목적지가 'Step1ViewController'(탭 바의 틀)인지 확인
-            if let tabBarController = segue.destination as? Step1ViewController {
-                // 2. 탭 바의 첫 번째 탭(Home)의 내용물을 StarbucksMainViewController로 교체
-                tabBarController.homeViewController = StarbucksMainViewController()
-            }
+            // 탭 바의 첫 번째 탭(Home)의 내용물을 StarbucksMainViewController로 교체
+            tabBarController.homeViewController = StarbucksMainViewController()
         }
+        // STEP 1일 때는 기본값(빈 화면)을 사용하므로 별도 처리 필요 없음
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

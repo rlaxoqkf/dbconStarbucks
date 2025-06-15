@@ -8,10 +8,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Root View Controller-->
+        <!--StepListViewController-->
         <scene sceneID="Yv2-3m-xHt">
             <objects>
-                <tableViewController id="t6q-SM-1lm" customClass="StepListViewController" customModule="StarbucksDemo" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="t6q-SM-1lm" userLabel="StepListViewController" customClass="StepListViewController" customModule="StarbucksDemo" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="4d3-6f-eZj">
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -50,8 +50,8 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Root View Controller" id="6Hb-Jf-n6a"/>
                     <connections>
-                        <segue destination="kds-O9-MGO" kind="show" identifier="showStep1" id="KYg-Jr-wgT"/>
-                        <segue destination="wdz-Df-rEp" kind="show" identifier="showStep2" id="2fO-tk-VcY"/>
+                        <segue destination="kds-O9-MGO" kind="show" identifier="showStep2" id="LfZ-B7-ted"/>
+                        <segue destination="kds-O9-MGO" kind="show" identifier="showStep1" id="pKx-GH-9aY"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9o0-Yh-Dkk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -73,57 +73,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7hy-3B-kXm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1955" y="418"/>
-        </scene>
-        <!--Item 2-->
-        <scene sceneID="a1u-3a-r5Z">
-            <objects>
-                <viewController id="ILQ-lL-Sil" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="jqM-35-uRL">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="4p7-w9-rGC"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item 2" id="RPK-QX-jqI"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="37e-dU-sVu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1021" y="1392"/>
-        </scene>
-        <!--Item 1-->
-        <scene sceneID="Zdb-Xk-5m2">
-            <objects>
-                <viewController id="qNd-e8-PJB" customClass="StarbucksMainViewController" customModule="StarbucksDemo" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="6rq-WF-YGH">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="yck-qf-a52"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item 1" id="UMg-X1-5zx"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="4Pc-05-VZN" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1021" y="785"/>
-        </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="qUu-QX-Cxg">
-            <objects>
-                <tabBarController id="wdz-Df-rEp" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="pbu-s5-2b8"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="4ij-60-oiG">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="qNd-e8-PJB" kind="relationship" relationship="viewControllers" id="e6H-wn-0vp"/>
-                        <segue destination="ILQ-lL-Sil" kind="relationship" relationship="viewControllers" id="o5B-sV-H6E"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="RDp-eY-VOC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="150" y="1070"/>
         </scene>
         <!--Item 1-->
         <scene sceneID="qZK-jL-TL3">
@@ -177,6 +126,9 @@
             <point key="canvasLocation" x="-733" y="102"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="pKx-GH-9aY"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
